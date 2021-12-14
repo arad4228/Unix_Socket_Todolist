@@ -66,10 +66,11 @@ int main(void)
                 sqlite3_close(db);
                 exit(1);
         }
-	// 데이터 베이스 생성 쿼리문과 기본적인 데이터를 저장.
+	// 데이터 베이스 생성 쿼리문 데이터베이스가 있다면 제거하고 만든다.
+	// 이유는 서버는 항상 동작하는 것을 기본 전제조건을 한다.
+	// 컴파일과 동작 오류를 방지하기 위해 있다면 제거하고 생성
         char* query = "DROP TABLE IF EXISTS Lists;"
-                "CREATE TABLE Lists (ID INTEGER PRIMARY KEY, EndDay INTEGER, Name TEXT, Description TEXT);"
-		"INSERT INTO Lists VALUES (1, 20,'유닉스', '시험');";
+                "CREATE TABLE Lists (ID INTEGER PRIMARY KEY, EndDay INTEGER, Name TEXT, Description TEXT);";
 
 	// Sqlite query문 실행
         rc = sqlite3_exec(db, query, 0, 0, &err_msg);
@@ -190,6 +191,9 @@ int main(void)
 				}
 				// 쿼리 비우기.
 				sqlite3_finalize(res);
+				// 사용한 공간은 에러방지를 위해 초기화
+				memset(Rmsg,'\0',sizeof(Rmsg));
+                               	memset(Smsg,'\0',sizeof(Smsg));
 				printf("cd done\n");
 			}
 			// 데이터 delete를 호출했다면
@@ -231,7 +235,11 @@ int main(void)
 				}
 				// 쿼리 비우기.
 				sqlite3_finalize(res);
+				// err 메시지 공간 비우기
 				sqlite3_free(err_msg);
+				// 사용한 공간은 에러방지를 위해 초기화
+				memset(Rmsg,'\0',sizeof(Rmsg));
+                                memset(Smsg,'\0',sizeof(Smsg));
 				printf("dd done\n");
 
 			}	
@@ -294,7 +302,11 @@ int main(void)
 
 				// 쿼리문 비우기.
 				sqlite3_finalize(res);
+				// err메시지 공간 비우기
 				sqlite3_free(err_msg);
+				// 사용한 공간은 에러방지를 위해 초기화
+				memset(Rmsg,'\0',sizeof(Rmsg));
+                                memset(Smsg,'\0',sizeof(Smsg));
 				printf("Pd done\n");
 			}
 			// Id으로 원하는 데이터 출력을 전달받은 경우
@@ -349,7 +361,11 @@ int main(void)
 				}
 				// 쿼리문 정리하기
 				sqlite3_finalize(res);
+				// err 메시지 공간 비우기
 				sqlite3_free(err_msg);
+				// 사용한 공간은 에러방지를 위해 초기화
+				memset(Rmsg,'\0',sizeof(Rmsg));
+                                memset(Smsg,'\0',sizeof(Smsg));
 				printf("pd done\n");
 			}
 			// 오늘 할일 출력을 전달받았다면
@@ -413,7 +429,11 @@ int main(void)
 				}
 				// 쿼리 비우기.
 				sqlite3_finalize(res);
+				// 에러 메시지를 위한 공간 비우기
 				sqlite3_free(err_msg);
+				// 오류방지를 위해 모든 공간 초기화
+				memset(Rmsg,'\0',sizeof(Rmsg));
+                                memset(Smsg,'\0',sizeof(Smsg));
 				printf("td done\n");
 
 			}
@@ -429,7 +449,6 @@ int main(void)
 					exit(1);
 				}
 				id = atoi(Rmsg);
-				printf("%d\n",id);
 				// 쿼리문을 생성한다. 해당 id가 데이터베이스에 있는지
 				char* query = "SELECT * FROM Lists WHERE ID = ?";
 				// 쿼리문 준비하기
@@ -510,9 +529,12 @@ int main(void)
 						perror("send error");
 						exit(1);
 					}
+					// 에러 방지를 위해 사용한 공간 초기화
 					memset(Rmsg,'\0',sizeof(Rmsg));
 					memset(Smsg,'\0',sizeof(Smsg));
+					// 쿼리문 정리
 					sqlite3_finalize(res);
+					// 에러메시지 정리
 					sqlite3_free(err_msg);
 					printf("ud Done\n");
 				}
