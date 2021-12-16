@@ -374,8 +374,8 @@ int main(void)
 				int days;
 				int count;
                        	 printf("ok td\n");
-				// 시간구조체에서 월에 대한 정보 받아오기.
-        	                days = tm->tm_mon+1;
+				// 시간구조체에서 날에 대한 정보 받아오기.
+        	                days = tm->tm_mday;
 			
 				// 1번째 쿼리문 작성하기(몇개의 개수가 있는지 전달을 위한)
 				char* query1 = "SELECT COUNT(ID) FROM Lists WHERE EndDay = ?";

@@ -96,7 +96,7 @@ int main(void)
 			days[strlen(days)-1] = '\0';
 			if(strcmp(days,"-1")== 0)
 			{
-				sprintf(days,"%d",tm->tm_mon+1);
+				sprintf(days,"%d",tm->tm_mday);
 			}
 			printf("이름(50글자이내):");
 			fgets(tname, sizeof(tname), stdin);
